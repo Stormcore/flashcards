@@ -23,7 +23,7 @@ const cards = (state, action) => {
   }
 };
 
-const deck = (state, action) => {
+const decks = (state, action) => {
   switch (action.type) {
     case 'ADD_DECK':
       let newDeck = {
@@ -65,9 +65,7 @@ const Sidebar = React.createClass({
           )
         }
       </ul>
-      {
-        props.addingDeck && <input ref='add' />
-      }
+      { props.addingDeck && <input ref='add' /> }
     </div>);
   }
 });
@@ -79,9 +77,18 @@ const App = (props) => {
 };
 
 function run() {
-  let state = store.getState;
+  let state = store.getState();
+  console.log(state);
   ReactDOM.render(<app>
-      <Sidebar decks={[ {name: 'Deck 1'}, {name: 'Deck 2'} ]} addingDeck={true} />
+      <Sidebar decks={state.decks} addingDeck={state.addingDeck} />
     </app>,
      document.getElementById('root'));
 }
+
+run();
+
+store.subscribe(run);
+
+window.show = () => store.dispatch(showAddDeck());
+window.hide = () => store.dispatch(hideAddDeck());
+window.add = () => store.dispatch(addDeck(new Date().to_string()));

@@ -32,7 +32,7 @@ var cards = function cards(state, action) {
   }
 };
 
-var deck = function deck(state, action) {
+var decks = function decks(state, action) {
   switch (action.type) {
     case 'ADD_DECK':
       var newDeck = {
@@ -99,12 +99,27 @@ var App = function App(props) {
 };
 
 function run() {
-  var state = store.getState;
+  var state = store.getState();
+  console.log(state);
   ReactDOM.render(React.createElement(
     'app',
     null,
-    React.createElement(Sidebar, { decks: [{ name: 'Deck 1' }, { name: 'Deck 2' }], addingDeck: true })
+    React.createElement(Sidebar, { decks: state.decks, addingDeck: state.addingDeck })
   ), document.getElementById('root'));
 }
+
+run();
+
+store.subscribe(run);
+
+window.show = function () {
+  return store.dispatch(showAddDeck());
+};
+window.hide = function () {
+  return store.dispatch(hideAddDeck());
+};
+window.add = function () {
+  return store.dispatch(addDeck(new Date().to_string()));
+};
 
 },{}]},{},[1]);
