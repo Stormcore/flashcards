@@ -27,7 +27,7 @@ const decks = (state, action) => {
   switch (action.type) {
     case 'ADD_DECK':
       let newDeck = {
-        name: action.date,
+        name: action.data,
         id: +new Date
       };
       return state.concat([newDeck]);
@@ -91,4 +91,4 @@ store.subscribe(run);
 
 window.show = () => store.dispatch(showAddDeck());
 window.hide = () => store.dispatch(hideAddDeck());
-window.add = () => store.dispatch(addDeck(new Date().to_string()));
+window.add = () => store.dispatch(addDeck(new Date().toString()));

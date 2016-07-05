@@ -36,7 +36,7 @@ var decks = function decks(state, action) {
   switch (action.type) {
     case 'ADD_DECK':
       var newDeck = {
-        name: action.date,
+        name: action.data,
         id: +new Date()
       };
       return state.concat([newDeck]);
@@ -119,7 +119,7 @@ window.hide = function () {
   return store.dispatch(hideAddDeck());
 };
 window.add = function () {
-  return store.dispatch(addDeck(new Date().to_string()));
+  return store.dispatch(addDeck(new Date().toString()));
 };
 
 },{}]},{},[1]);
