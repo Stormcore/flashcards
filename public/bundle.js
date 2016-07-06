@@ -1,19 +1,19 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var addDeck = function addDeck(name) {
+var _addDeck = function _addDeck(name) {
   return {
     type: 'ADD_DECK', data: name
   };
 };
 
-var showAddDeck = function showAddDeck() {
+var _showAddDeck = function _showAddDeck() {
   return {
     type: 'SHOW_ADD_DECK'
   };
 };
 
-var hideAddDeck = function hideAddDeck() {
+var _hideAddDeck = function _hideAddDeck() {
   return {
     type: 'HIDE_ADD_DECK'
   };
@@ -64,7 +64,13 @@ var store = Redux.createStore(Redux.combineReducers({
 
 var Sidebar = React.createClass({
   displayName: 'Sidebar',
+  componentDidUpdate: function componentDidUpdate() {
+    var element = ReactDOM.findDOMNode(this.refs.add);
+    if (element) element.focus();
+  },
   render: function render() {
+    var _this = this;
+
     var props = this.props;
     return React.createElement(
       'div',
@@ -73,6 +79,13 @@ var Sidebar = React.createClass({
         'h2',
         null,
         'ALL DECKS'
+      ),
+      React.createElement(
+        'button',
+        { onClick: function onClick(e) {
+            return _this.props.showAddDeck();
+          } },
+        'New Deck'
       ),
       React.createElement(
         'ul',
@@ -85,8 +98,14 @@ var Sidebar = React.createClass({
           );
         })
       ),
-      props.addingDeck && React.createElement('input', { ref: 'add' })
+      props.addingDeck && React.createElement('input', { ref: 'add', onKeyPress: this.createDeck })
     );
+  },
+  createDeck: function createDeck(event) {
+    if (event.which !== 13) return;
+    var name = ReactDOM.findDOMNode(this.refs.add).value;
+    this.props.addDeck(name);
+    this.props.hideAddDeck();
   }
 });
 
@@ -104,22 +123,24 @@ function run() {
   ReactDOM.render(React.createElement(
     'app',
     null,
-    React.createElement(Sidebar, { decks: state.decks, addingDeck: state.addingDeck })
+    React.createElement(Sidebar, {
+      decks: state.decks,
+      addingDeck: state.addingDeck,
+      addDeck: function addDeck(name) {
+        return store.dispatch(_addDeck(name));
+      },
+      showAddDeck: function showAddDeck() {
+        return store.dispatch(_showAddDeck());
+      },
+      hideAddDeck: function hideAddDeck() {
+        return store.dispatch(_hideAddDeck());
+      }
+    })
   ), document.getElementById('root'));
 }
 
 run();
 
 store.subscribe(run);
-
-window.show = function () {
-  return store.dispatch(showAddDeck());
-};
-window.hide = function () {
-  return store.dispatch(hideAddDeck());
-};
-window.add = function () {
-  return store.dispatch(addDeck(new Date().toString()));
-};
 
 },{}]},{},[1]);
