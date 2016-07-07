@@ -1,14 +1,4 @@
-const addDeck = name => ({
-  type: 'ADD_DECK', data: name
-});
-
-const showAddDeck = () => ({
-  type: 'SHOW_ADD_DECK'
-});
-
-const hideAddDeck = () => ({
-  type: 'HIDE_ADD_DECK'
-});
+import { addDeck, showAddDeck, hideAddDeck } from './actions'
 
 const cards = (state, action) => {
   switch (action.type) {
