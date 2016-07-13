@@ -1,55 +1,29 @@
-import { addDeck, showAddDeck, hideAddDeck } from './actions';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import { Router, Route, browserHistory } from 'react-router';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 import * as reducers from './reducers';
+reducers.routing = routerReducer;
 
-const store = Redux.createStore(Redux.combineReducers(reducers));
+import App from './components/App';
 
-const Sidebar = React.createClass({
-  componentDidUpdate() {
-    let element = ReactDOM.findDOMNode(this.refs.add);
-    if (element) element.focus();
-  },
-  render() {
-    let props = this.props;
-    return(<div className='sidebar'>
-      <h2>ALL DECKS</h2>
-      <button onClick={e => this.props.showAddDeck()}>New Deck</button>
-      <ul>
-        {
-          props.decks.map((deck, i) =>
-            <li key={i}>{deck.name}</li>
-          )
-        }
-      </ul>
-      { props.addingDeck && <input ref='add' onKeyPress={this.createDeck} /> }
-    </div>);
-  },
-  createDeck(event) {
-    if (event.which !== 13) return;
-    let name = ReactDOM.findDOMNode(this.refs.add).value;
-    this.props.addDeck(name);
-    this.props.hideAddDeck();
-  }
-});
-
-const App = (props) => {
-  return (<div className='app'>
-      { props.children }
-    </div>);
-};
+const store = createStore(combineReducers(reducers));
+const history = syncHistoryWithStore(browserHistory, store);
+const routes = (
+  <Route path='/' component={App}>
+  </Route>
+);
 
 function run() {
   let state = store.getState();
   console.log(state);
   ReactDOM.render(
-    <app>
-      <Sidebar
-        decks={state.decks}
-        addingDeck={state.addingDeck}
-        addDeck={name => store.dispatch(addDeck(name))}
-        showAddDeck={() => store.dispatch(showAddDeck())}
-        hideAddDeck={() => store.dispatch(hideAddDeck())}
-      />
-    </app>,
+    <Provider store={store}>
+      <Router history={history} routes={routes}>
+      </Router>
+    </Provider>,
      document.getElementById('root'));
 }
 
