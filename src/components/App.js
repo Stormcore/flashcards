@@ -1,12 +1,18 @@
 import React from 'react';
 import Sidebar from './Sidebar';
+import { connect } from 'react-redux';
 
-const App = (props) => {
+const mapStateToProps = (props, { params: { deckId } }) => ({
+  deckId
+});
+
+const App = ({ deckId, children }) => {
   return (
     <div className='app'>
       <Sidebar />
-      { props.children }
+      <h1>{deckId}</h1>
+      { children }
     </div>);
 };
 
-export default App;
+export default connect(mapStateToProps)(App);

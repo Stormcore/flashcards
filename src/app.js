@@ -8,16 +8,22 @@ import * as reducers from './reducers';
 reducers.routing = routerReducer;
 
 import App from './components/App';
+import VisibleCards from './components/VisibleCards';
 
-const store = createStore(combineReducers(reducers));
+import * as localStorage from './localStorage';
+
+const store = createStore(combineReducers(reducers), localStorage.get());
 const history = syncHistoryWithStore(browserHistory, store);
 const routes = (
   <Route path='/' component={App}>
+    <Route path='/deck/:deckId' component={VisibleCards} />
   </Route>
 );
 
 function run() {
   let state = store.getState();
+  localStorage.set(state, ['decks', 'cards']);
+
   console.log(state);
   ReactDOM.render(
     <Provider store={store}>

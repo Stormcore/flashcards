@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { addDeck, showAddDeck, hideAddDeck } from './../actions';
+import { Link } from 'react-router';
 
 const mapStateToProps = ({ decks, addingDeck }) => ({
   decks,
@@ -27,7 +28,9 @@ const Sidebar = React.createClass({
       <ul>
         {
           props.decks.map((deck, i) =>
-            <li key={i}>{deck.name}</li>
+            <li key={i}>
+              <Link to={`/deck/${deck.id}`} >{deck.name}</Link>
+            </li>
           )
         }
       </ul>
