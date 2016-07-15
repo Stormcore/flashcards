@@ -1,28 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
-import { addDeck, showAddDeck, hideAddDeck } from './../actions';
-import { Link } from 'react-router';
+/* jshint esversion: 6 */
 
-const mapStateToProps = ({ decks, addingDeck }) => ({
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { connect } from 'react-redux'
+import { addDeck, showAddDeck, hideAddDeck } from './../actions'
+import { Link } from 'react-router'
+
+const mapStateToProps = ({decks, addingDeck}) => ({
   decks,
   addingDeck
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   addDeck: name => dispatch(addDeck(name)),
   showAddDeck: () => dispatch(showAddDeck()),
   hideAddDeck: () => dispatch(hideAddDeck())
-});
+})
 
 const Sidebar = React.createClass({
-  componentDidUpdate() {
-    let element = ReactDOM.findDOMNode(this.refs.add);
-    if (element) element.focus();
+  componentDidUpdate () {
+    let element = ReactDOM.findDOMNode(this.refs.add)
+    if (element) element.focus()
   },
-  render() {
-    let props = this.props;
-    return(<div className='sidebar'>
+  render () {
+    let props = this.props
+    return (<div className='sidebar'>
       <h2>ALL DECKS</h2>
       <ul>
         {
@@ -33,15 +35,15 @@ const Sidebar = React.createClass({
           )
         }
       </ul>
-      { props.addingDeck && <input ref='add' onKeyPress={this.createDeck} /> }
-    </div>);
+      {props.addingDeck && <input ref='add' onKeyPress={this.createDeck} />}
+    </div>)
   },
-  createDeck(event) {
-    if (event.which !== 13) return;
-    let name = ReactDOM.findDOMNode(this.refs.add).value;
-    this.props.addDeck(name);
-    this.props.hideAddDeck();
+  createDeck (event) {
+    if (event.which !== 13) return
+    let name = ReactDOM.findDOMNode(this.refs.add).value
+    this.props.addDeck(name)
+    this.props.hideAddDeck()
   }
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
